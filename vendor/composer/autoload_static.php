@@ -11,9 +11,9 @@ class ComposerStaticInit07f5dad6f1bbe59931ca489a5f23aa4c
         array (
             'ZipStream\\' => 10,
         ),
-        'Y' => 
+        'R' => 
         array (
-            'Yucra\\Sigi\\' => 11,
+            'Ramirez\\Sigi\\' => 13,
         ),
         'P' => 
         array (
@@ -39,7 +39,7 @@ class ComposerStaticInit07f5dad6f1bbe59931ca489a5f23aa4c
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
         ),
-        'Yucra\\Sigi\\' => 
+        'Ramirez\\Sigi\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
