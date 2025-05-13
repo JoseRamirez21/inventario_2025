@@ -13,7 +13,7 @@ class UsuarioModel
     
     public function registrarUsuario($dni, $apellidos_nombres, $correo, $telefono, $password)
     {
-        $password_secure = password_hash($password, PASSWORD_DEFAULT); // Hash de la contraseña
+        $password_secure = password_hash($password, PASSWORD_DEFAULT); //Encriptacion de contraseña mediante hash
         $sql = $this->conexion->query("INSERT INTO usuarios (dni, nombres_apellidos, correo, telefono, password) VALUES ('$dni','$apellidos_nombres','$correo','$telefono', '$password_secure')");
         if ($sql) {
             $sql = $this->conexion->insert_id;
