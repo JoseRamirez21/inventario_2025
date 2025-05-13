@@ -55,27 +55,28 @@ if ($tipo == "listar_usuarios_ordenados_tabla") {
 if ($tipo == "registrar") {
     $arr_Respuesta = array('status' => false, 'msg' => 'Error_Sesion');
     if ($objSesion->verificar_sesion_si_activa($id_sesion, $token)) {
-        //print_r($_POST);
-        //repuesta
+        //print_r($_POST);  Realizar para revisar los funcionamientos previos
+        //Obtiene datos del formulario
         if ($_POST) {
             $dni = $_POST['dni'];
             $apellidos_nombres = $_POST['apellidos_nombres'];
             $correo = $_POST['correo'];
             $telefono = $_POST['telefono'];
             $password = $_POST['password'];
-
+        // Verifica si hay campos vacíos
             if ($dni == "" || $apellidos_nombres == "" || $correo == "" || $telefono == "" || $password == "") {
-                //repuesta
                 $arr_Respuesta = array('status' => false, 'mensaje' => 'Error, campos vacíos');
             } else {
+                //Buscar usuario mediante ID
                 $arr_Usuario = $objUsuario->buscarUsuarioByDni($dni);
                 if ($arr_Usuario) {
+                    // Respuesta de la consulta realizada
                     $arr_Respuesta = array('status' => false, 'mensaje' => 'Registro Fallido, Usuario ya se encuentra registrado');
                 } else {
+                    // Registrar un nuevo usuario 
                     $id_usuario = $objUsuario->registrarUsuario($dni, $apellidos_nombres, $correo, $telefono, $password);
                     if ($id_usuario > 0) {
-                        // array con los id de los sistemas al que tendra el acceso con su rol registrado
-                        // caso de administrador y director
+                //REspuesta de la validacion de si se registro o no 
                         $arr_Respuesta = array('status' => true, 'mensaje' => 'Registro Exitoso');
                     } else {
                         $arr_Respuesta = array('status' => false, 'mensaje' => 'Error al registrar producto');
@@ -84,6 +85,7 @@ if ($tipo == "registrar") {
             }
         }
     }
+    // Retorno de la Respuesta en formato JSON
     echo json_encode($arr_Respuesta);
 }
 
