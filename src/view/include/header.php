@@ -80,9 +80,9 @@
                                 <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:void(0)">
                                     Mi perfil
                                 </a>
-                                <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:void(0)">
-                                    <span>Cambiar mi Contraseña</span>
-                                </a>
+                                <button class="dropdown-item d-flex align-items-center justify-content-between" onclick="sent_email_password();">
+                                    <span>Cambiar mi Contraseña</span>º
+                                </button>
                                 <button class="dropdown-item d-flex align-items-center justify-content-between" onclick="cerrar_sesion();">
                                     <span>Cerrar Sesión</span>
                                 </button>

@@ -331,7 +331,7 @@ async function reniciar_password(id) {
     } catch (e) {
         console.log("Error al actualizar periodo" + e);
     }
-
-
 }
+
+
 
