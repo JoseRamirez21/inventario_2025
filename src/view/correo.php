@@ -1,114 +1,262 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Comunicado Oficial - Universidad</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JC Licores - Recuperación de Contraseña</title>
   <style>
-    body {
+    * {
       margin: 0;
       padding: 0;
-      background-color: #f9f9f9;
-      font-family: 'Georgia', serif;
-      color: #333;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
     }
 
     .email-container {
-      max-width: 680px;
-      margin: 50px auto;
-      background-color: #fff;
-      border: 1px solid #e0e0e0;
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
       border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       overflow: hidden;
     }
 
-    .email-header {
-      background-color:#3694e3;
+    .header {
+      background: linear-gradient(135deg, #004080, #1E90FF);
+      padding: 20px;
       color: white;
-      padding: 30px 40px;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-img {
+      width: 50px;
+      height: 50px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #ffffff;
+      margin-right: 15px;
+    }
+
+    .company-name {
+      font-size: 24px;
+      font-weight: bold;
+      color: #ffffff;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    .content {
+      padding: 30px;
+      line-height: 1.6;
+      color: #333333;
+    }
+
+    .notice-time {
+      background-color: #e6f0ff;
+      border-left: 6px solid #1E90FF;
+      padding: 15px 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+      color: #003366;
+      font-weight: bold;
+      font-size: 18px;
       text-align: center;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      min-height: 10px; /* Ajuste más pequeño */
     }
 
-    .email-header h1 {
-      margin: 0;
-      font-size: 26px;
-      font-weight: normal;
+    .notice-time::before {
+      content: "⏳";
+      font-size: 28px;
+      position: absolute;
+      top: 20px;
+      left: 20px;
     }
 
-    .email-body {
-      padding: 40px;
-    }
-
-    .email-body h2 {
+    .countdown-text {
       font-size: 20px;
-      margin-top: 0;
-      margin-bottom: 20px;
-      font-weight: normal;
+      color: #1E90FF;
     }
 
-    .email-body p {
-      font-size: 16px;
-      line-height: 1.7;
-      margin-bottom: 20px;
+    .countdown-time {
+      font-size: 36px;
+      font-weight: 900;
+      color: #004080;
+      letter-spacing: 3px;
+      font-family: 'Courier New', Courier, monospace;
     }
 
-    .email-footer {
-      background-color: #f2f2f2;
+    .reset-link {
+      display: block;
       text-align: center;
-      padding: 25px;
-      font-size: 13px;
-      color: #555;
-    }
-
-    .email-footer a {
-      color: #555;
-      text-decoration: underline;
-    }
-
-    .button {
-      display: inline-block;
-      background-color: #3694e3;
+      background-color: #1E90FF;
       color: white;
       text-decoration: none;
-      padding: 12px 24px;
+      padding: 12px;
+      border-radius: 6px;
+      font-weight: bold;
+      margin: 30px auto;
+      width: 80%;
+      transition: background-color 0.3s ease;
+    }
+
+    .reset-link:hover {
+      background-color: #0066cc;
+    }
+
+    .security-notice {
+      background-color: #fff3cd;
+      border: 1px solid #ffeaa7;
       border-radius: 4px;
-      margin-top: 15px;
+      padding: 15px;
+      margin: 20px 0;
+    }
+
+    .security-notice h4 {
+      color: #856404;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    .security-notice ul {
+      color: #856404;
+      margin-left: 20px;
+    }
+
+    .security-notice li {
+      margin-bottom: 5px;
+    }
+
+    .greeting {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #004080;
       font-weight: bold;
     }
 
-    @media (max-width: 700px) {
-      .email-body, .email-header, .email-footer {
-        padding: 20px !important;
+    .message {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    @media only screen and (max-width: 600px) {
+      .content {
+        padding: 20px;
+      }
+
+      .company-name {
+        font-size: 20px;
+      }
+
+     .logo-img {
+  width: 50px;
+  height: 50px;
+  margin-right: 15px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+
+      .reset-link {
+        width: 100%;
+      }
+
+      .notice-time {
+        min-height: 90px; /* Ajuste más pequeño para móvil */
+      }
+
+      .countdown-time {
+        font-size: 28px;
       }
     }
+   
+
   </style>
 </head>
 <body>
   <div class="email-container">
-    <div class="email-header">
-      <h1>I E S T P "HUANTA"</h1>
+    <!-- Encabezado -->
+    <div class="header">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcOg8Ax5g9goNiTXPtuLwE23JPqOtrO3VSEQ&s" alt="Logo de JC Licores" class="logo-img" />
+<h1 class="company-name">JC LICORES</h1>
+
     </div>
-    <div class="email-body">
-      <h2>Estimado/a {Nombre del destinatario},</h2>
-      <p>
-        Le extendemos un cordial saludo en nombre de la Universidad de Harvard. Nos dirigimos a usted para informarle sobre {{motivo o tema del comunicado}}, el cual consideramos de su interés como parte de nuestra comunidad académica.
-      </p>
-      <p>
-        Puede acceder a más detalles a través del siguiente enlace:
-      </p>
-      <a href="{{URL de destino}}" class="button">Ver detalles</a>
-      <p>
-        Si tiene alguna consulta adicional, no dude en contactarnos. Agradecemos su atención y compromiso con la excelencia académica.
-      </p>
-      <p>
-        Atentamente,<br><br>
-        <strong>Oficina de Comunicaciones<br>I E S T P "HUANTA"</strong>
-      </p>
+
+    <!-- Contenido -->
+    <div class="content">
+      <div class="notice-time">
+        <div class="countdown-text">Tiempo para restablecer la contraseña:</div>
+        <div id="countdown" class="countdown-time">02:00:00</div>
+      </div>
+
+      <div class="greeting">
+        ¡Hola estimado cliente!
+      </div>
+
+      <div class="message">
+        <p>Hemos recibido una solicitud para recuperar tu contraseña en <strong>JC Licores</strong>.</p>
+        <p>Haz clic en el siguiente botón para restablecerla:</p>
+      </div>
+
+      <a href="#" class="reset-link">Restablecer mi contraseña</a>
+
+      <div class="security-notice">
+        <h4>⚠️ Recomendaciones de Seguridad:</h4>
+        <ul>
+          <li>Usa una contraseña segura después de restablecerla</li>
+          <li>No reutilices contraseñas anteriores</li>
+          <li>No compartas tu nueva contraseña</li>
+        </ul>
+      </div>
+
+      <div class="message">
+        <p>Si no solicitaste esta recuperación, ignora este mensaje o contáctanos de inmediato.</p>
+        <p><strong>Gracias por confiar en JC Licores.</strong></p>
+      </div>
     </div>
-    <div class="email-footer">
-      © {{Año actual}} I E S T P "HUANTA". Todos los derechos reservados.<br>
-      <a href="{{URL de cancelación}}">Cancelar suscripción</a>
-    </div>
+
+    <!-- Footer -->
+    <p style="width: 100%; text-align: center; font-size: 13px; color: white; background: linear-gradient(135deg, #004080, #1E90FF); padding: 10px; margin-top: 30px;">
+      © JC Licores 2025
+    </p>
   </div>
+
+  <script>
+    const countdownElement = document.getElementById('countdown');
+    let remainingTime = 2 * 60 * 60; // 2 horas en segundos
+
+    function updateCountdown() {
+      const hours = Math.floor(remainingTime / 3600);
+      const minutes = Math.floor((remainingTime % 3600) / 60);
+      const seconds = remainingTime % 60;
+
+      countdownElement.textContent = 
+        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+      if (remainingTime > 0) {
+        remainingTime--;
+      } else {
+        clearInterval(timer);
+        countdownElement.textContent = "00:00:00";
+      }
+    }
+
+    const timer = setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
 </body>
 </html>
