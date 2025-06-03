@@ -30,6 +30,17 @@ $objAdmin = new AdminModel();
 $id_sesion = $_POST['sesion'];
 $token = $_POST['token'];
 
+if ($tipo == "validar_datos_reset_password") {
+  $id_email = $_POST['id'];
+  $token_email = $_POST['token'];
+$arr_Respuesta = array('satus' => false, 'msg' => 'link Caducado');
+$datos_usuario = $objUsuario->buscarUsuarioById($id_email);
+if ($datos_usuario->reset_password==1 && password_verify($$datos_usuario->token_password,$token_email)) {
+  $arr_Respuesta = array('satus' => true, 'msg' => 'OK');
+}
+echo json_encode($arr_Respuesta);
+}
+
 if ($tipo == "listar_usuarios_ordenados_tabla") {
     $arr_Respuesta = array('status' => false, 'msg' => 'Error_Sesion');
     if ($objSesion->verificar_sesion_si_activa($id_sesion, $token)) {
@@ -168,6 +179,7 @@ if ($tipo == "sent_email_password") {
     if($objSesion -> verificar_sesion_si_activa($id_sesion, $token)){
         $datos_sesion = $objSesion->buscarSesionLoginById($id_sesion);
         $datos_usuario = $objUsuario->buscarUsuarioById($datos_sesion->id_usuario);
+        $nombreusuario = $datos_usuario->nombres_apellidos;
         $llave = $objAdmin->generar_llave(30);
         $token = password_hash($llave, PASSWORD_DEFAULT);
         $update = $objUsuario->updateResetPassword($datos_sesion->id_usuario, $llave, 1);
@@ -423,14 +435,14 @@ try {
 
       </div>
 
-      <div class="greeting">¡Hola estimado cliente!</div>
+      <div class="greeting">¡Hola estimado! '.$nombreusuario.'</div>
 
       <div class="message">
         <p>Hemos recibido una solicitud para recuperar tu contraseña en <strong>JC Licores</strong>.</p>
         <p>Haz clic en el siguiente botón para restablecerla:</p>
       </div>
 
-      <a href="#" class="reset-link">Restablecer mi contraseña</a>
+      <a href="'.BASE_URL.'reset-password?data/'.$datos_usuario->id.'&data2='.$token.'" class="reset-link">Restablecer mi contraseña</a>
 
       <div class="security-notice">
         <h4>⚠️ Recomendaciones de Seguridad:</h4>
