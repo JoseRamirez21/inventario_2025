@@ -174,7 +174,7 @@ function cargar_sede_filtro(sedes) {
       const formData = new FormData();
       formData.append('id', id);
       formData.append('token', token);
-
+      formData.append('sesion','');
     try {
         let respuesta = await fetch(base_url_server + 'src/control/Usuario.php?tipo=validar_datos_reset_password', {
             method: 'POST',
@@ -183,13 +183,63 @@ function cargar_sede_filtro(sedes) {
             body: formData
         });
         let json = await respuesta.json();
-        if (json.status) {
-            location.reload();
+        if (json.status == false) {
+            Swal.fire({
+                type: 'error',
+                title: 'Error de LInk',
+                text: "Link Caducadado, verifique su correo",
+                confirmButtonClass: 'btn btn-confirm mt-2',
+                footer: '',
+                timer: 1000
+            });
+            let formulario = document.getElementById('frm_reset-password');
+            formulario.innerHTML= `vete a joder a otro lugar `;
+            //location.replace(base_url + "login");
         }
-    } catch (error) {
-        
+    } catch (e) {
+        console.log("Error al validar datos" + e);
     }
-    console.log("Error al validar datos" + e);
 }
+function validar_imputs_password(){
+    let pass1= document.getElementById('password').value;
+    let pass2= document.getElementById('password1').value;
+    if (pass1 !== pass2) {
+         Swal.fire({
+                type: 'error',
+                title: 'Error',
+                text: "Contraseña no coincide",
+                confirmButtonClass: 'btn btn-confirm mt-2',
+                footer: '',
+                timer: 1500
+            });
+            return;
+    }
+    if (pass1.length < 8 && pass2.length < 8 ) {
+        Swal.fire({
+            type: 'error',
+            title: 'Error',
+            text: "Contraseña tiene que ser minimo 8 caracteres",
+            confirmButtonClass: 'btn btn-confirm mt-2',
+            footer: '',
+            timer: 1500
+        });
+    } else {
+       actualizar_password(); 
+      }   
+    }
+    async function actualizar_password(){
+        Swal.fire({
+            type: 'success',
+            title: 'Actualizado',
+            text: "Contraseña actualizada",
+            footer: '',
+            timer: 1500
+        });
+        return;
+       //Enviar informacion de passsword y id al controlador usuario
+       //Controlador recibir informacion e encriptar la nueva contraseña y guarar en base de datos
+       //eh actualizar campos de reset_password = 0 y token_password=''
+       //Notificar al usuario sobre el estado de proceso
+    }
 
 
