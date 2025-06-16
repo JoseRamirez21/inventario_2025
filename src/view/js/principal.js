@@ -167,6 +167,7 @@ function cargar_sede_filtro(sedes) {
 
 // ------------------------------------------- FIN DE DATOS DE CARGA PARA FILTRO DE BUSQUEDA -----------------------------------------------
 
+
 async function validar_datos_reset_password(){
     let id = document.getElementById('data').value;
     let token = document.getElementById('data2').value;
