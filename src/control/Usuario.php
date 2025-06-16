@@ -3,23 +3,12 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-
 session_start();
 require_once('../model/admin-sesionModel.php');
 require_once('../model/admin-usuarioModel.php');
 require_once('../model/adminModel.php');
 
-/*require_once('../../vendor/autoload.php');
-require_once('../../vendor/phpmailer/phpmailer/src/Exception.php');
-require_once('../../vendor/phpmailer/phpmailer/src/PHPMailer.php');
-require_once('../../vendor/phpmailer/phpmailer/src/SMtp.php');
-*/
-
-
 $tipo = $_GET['tipo'];
-
-
-
 
 //instanciar la clase categoria model
 $objSesion = new SessionModel();
@@ -31,16 +20,63 @@ $id_sesion = $_POST['sesion'];
 $token = $_POST['token'];
 
 if ($tipo == "validar_datos_reset_password") {
-  $id_email = $_POST['id'];
-  $token_email = $_POST['token'];
+    $id_email = $_POST['id'];
+    $token_email = $_POST['token'];
 
-$arr_Respuesta = array('status' => false, 'msg' => 'link Caducado');
-$datos_usuario = $objUsuario->buscarUsuarioById($id_email);
-if ($datos_usuario->reset_password==1 && password_verify($datos_usuario->token_password,$token_email)) {
-  $arr_Respuesta = array('status' => true, 'msg' => 'OK');
+    $arr_Respuesta = array('status' => false, 'msg' => 'link Caducado');
+    $datos_usuario = $objUsuario->buscarUsuarioById($id_email);
+    
+    if ($datos_usuario->reset_password == 1 && password_verify($datos_usuario->token_password, $token_email)) {
+        $arr_Respuesta = array('status' => true, 'msg' => 'OK');
+    }
+    echo json_encode($arr_Respuesta);
 }
-echo json_encode($arr_Respuesta);
+
+// Nueva funcionalidad para actualizar la contraseña
+if ($tipo == "actualizar_password_reset") {
+    $id_usuario = $_POST['id'];
+    $nueva_password = $_POST['password'];
+    $token_verificacion = $_POST['token'];
+    
+    $arr_Respuesta = array('status' => false, 'msg' => 'Error al actualizar contraseña');
+    
+    try {
+        // Verificar que el usuario y token sean válidos
+        $datos_usuario = $objUsuario->buscarUsuarioById($id_usuario);
+        
+        if ($datos_usuario && $datos_usuario->reset_password == 1 && 
+            password_verify($datos_usuario->token_password, $token_verificacion)) {
+            
+            // Actualizar contraseña y resetear campos de recuperación
+            $resultado = $objUsuario->actualizarPasswordYResetearToken($id_usuario, $nueva_password);
+            
+            if ($resultado) {
+                $arr_Respuesta = array(
+                    'status' => true, 
+                    'msg' => 'Contraseña actualizada correctamente'
+                );
+            } else {
+                $arr_Respuesta = array(
+                    'status' => false, 
+                    'msg' => 'Error al guardar en base de datos'
+                );
+            }
+        } else {
+            $arr_Respuesta = array(
+                'status' => false, 
+                'msg' => 'Token inválido o expirado'
+            );
+        }
+    } catch (Exception $e) {
+        $arr_Respuesta = array(
+            'status' => false, 
+            'msg' => 'Error del servidor: ' . $e->getMessage()
+        );
+    }
+    
+    echo json_encode($arr_Respuesta);
 }
+
 
 if ($tipo == "listar_usuarios_ordenados_tabla") {
     $arr_Respuesta = array('status' => false, 'msg' => 'Error_Sesion');
