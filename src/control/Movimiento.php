@@ -210,12 +210,30 @@ if ($tipo=="buscar_movimento_id") {
       $arr_Respuesta = array('status' => false, 'msg' => 'Error_Sesion');
     if ($objSesion->verificar_sesion_si_activa($id_sesion, $token)) {
        $id_movimiento = $_REQUEST['data'];
-       //echo $id_movimiento;
        $arrMovimiento = $objMovimiento->buscarMovimientoById($id_movimiento);
        $arrAmbOrigen = $objAmbiente->BuscarAmbienteById($arrMovimiento->id_ambiente_origen);
        $arrAmbDestino = $objAmbiente->BuscarAmbienteById($arrMovimiento->id_ambiente_destino);
          $arrUsuario = $objUsuario->buscarUsuarioById($arrMovimiento->id_usuario_registro);
-             $arrInstitucion = $objInstitucion->buscarInstitucionById($arrMovimiento->id_ies);
+             $arrIes = $objInstitucion->buscarInstitucionById($arrMovimiento->id_ies);
+              $arrDetalle =$objMovimiento->buscarDetalle_MovimientoByMovimiento($id_movimiento);
+              $arr_bienes = array();     
+              foreach ($arrDetalle as $bien) {
+                      // para probar si esta bien, no deberia de mostrar nada de nada despues de realizar el json_encode   echo $bien->$id_bien;
+                      $id_bien = $bien->id_bien;
+                      $res_bien = $objBien->buscarBienById($id_bien);
+                      
+// tarea  agregar bienes con array_push y despues el $array_bienes mandes ala respuesta y que se vea en la vista o interfaz y que muetsre todos los atributos del bien 
+                    }
+
+             $arr_Respuesta['movimiento'] = $arrMovimiento;
+               $arr_Respuesta['amb_origen'] = $arrAmbOrigen;
+                 $arr_Respuesta['amb_destino'] = $arrAmbDestino;
+                 $arr_Respuesta['datos_usuario'] = $arrUsuario;
+                 $arr_Respuesta['datos_ies'] = $arrIes;
+                   $arr_Respuesta['detalle']= $arrDetalle;
+                   $arr_Respuesta['status'] = true;
+                     $arr_Respuesta['msg'] = 'correcto';
+                   
     }
-echo json_encode($arrInstitucion);
+echo json_encode($arr_Respuesta);
 }
