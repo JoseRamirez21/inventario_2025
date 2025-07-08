@@ -221,16 +221,11 @@ if ($tipo=="buscar_movimento_id") {
 // tarea  agregar bienes con array_push y despues el $array_bienes mandes ala respuesta y que se vea en la vista o interfaz y que muestree todos los atributos del bien
 
 $array_bienes = array();
-
         foreach ($arrDetalle as $bien) {
             $id_bien = $bien->id_bien;
             $res_bien = $objBien->buscarBienById($id_bien);
-
             // Validamos que se haya encontrado el bien
-            if ($res_bien) {
                 array_push($array_bienes, $res_bien);
-            }
-
                     }
                 
              $arr_Respuesta['movimiento'] = $arrMovimiento;
@@ -238,8 +233,7 @@ $array_bienes = array();
                  $arr_Respuesta['amb_destino'] = $arrAmbDestino;
                  $arr_Respuesta['datos_usuario'] = $arrUsuario;
                  $arr_Respuesta['datos_ies'] = $arrIes;
-                   $arr_Respuesta['detalle']= $arrDetalle;
-                    $arr_Respuesta['bienes'] = $array_bienes; 
+                   $arr_Respuesta['detalle']= $array_bienes;
                    $arr_Respuesta['status'] = true;
                      $arr_Respuesta['msg'] = 'correcto';
                    
