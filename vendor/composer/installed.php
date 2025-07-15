@@ -3,7 +3,7 @@
         'name' => 'ramirez/sigi',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '015ebf85b3eed185d3bf8acbb8aac9e4ecea7b26',
+        'reference' => 'a9a786cbe4f4874cef7e3d78ae5cd8f073043b92',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -103,7 +103,7 @@
         'ramirez/sigi' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '015ebf85b3eed185d3bf8acbb8aac9e4ecea7b26',
+            'reference' => 'a9a786cbe4f4874cef7e3d78ae5cd8f073043b92',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

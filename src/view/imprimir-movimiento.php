@@ -1,123 +1,103 @@
 <?php
 $ruta = explode("/", $_GET['views']);
-if (!isset($ruta[1]) || $ruta[1]=="") {
-    header("location:".BASE_URL."movimientos");
+if (!isset($ruta[1]) || $ruta[1] == "") {
+    header("location:" . BASE_URL . "movimientos");
 }
 
-$curl = curl_init(); //inicia la sesión cURL
+// =================== INICIA cURL ===================
+$curl = curl_init();
 curl_setopt_array($curl, array(
-    CURLOPT_URL => BASE_URL_SERVER."src/control/Movimiento.php?tipo=buscar_movimento_id&sesion=".$_SESSION['sesion_id']."&token=".$_SESSION['sesion_token']."&data=".$ruta[1], //url a la que se conecta se envia por metodo GET
-    CURLOPT_RETURNTRANSFER => true, //devuelve el resultado como una cadena del tipo curl_exec
-    CURLOPT_FOLLOWLOCATION => true, //sigue el encabezado que le envíe el servidor
-    CURLOPT_ENCODING => "", // permite decodificar la respuesta y puede ser"identity", "deflate", y "gzip", si está vacío recibe todos los disponibles.
-    CURLOPT_MAXREDIRS => 10, // Si usamos CURLOPT_FOLLOWLOCATION le dice el máximo de encabezados a seguir
-    CURLOPT_TIMEOUT => 30, // Tiempo máximo para ejecutar
-    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, // usa la versión declarada
-    CURLOPT_CUSTOMREQUEST => "GET", // el tipo de petición, puede ser PUT, POST, GET o Delete dependiendo del servicio
+    CURLOPT_URL => BASE_URL_SERVER . "src/control/Movimiento.php?tipo=buscar_movimento_id&sesion=" . $_SESSION['sesion_id'] . "&token=" . $_SESSION['sesion_token'] . "&data=" . $ruta[1],
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_ENCODING => "",
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => "GET",
     CURLOPT_HTTPHEADER => array(
-        "x-rapidapi-host: ".BASE_URL_SERVER,
+        "x-rapidapi-host: " . BASE_URL_SERVER,
         "x-rapidapi-key: XXXX"
-    ), //configura las cabeceras enviadas al servicio
-)); //curl_setopt_array configura las opciones para una transferencia cURL
-
-$response = curl_exec($curl); // respuesta generada
-$err = curl_error($curl); // muestra errores en caso de existir
-
-curl_close($curl); // termina la sesión 
+    ),
+));
+$response = curl_exec($curl);
+$err = curl_error($curl);
+curl_close($curl);
+// =================== FIN cURL ===================
 
 if ($err) {
-    echo "cURL Error #:" . $err; // mostramos el error
+    echo "cURL Error #:" . $err;
 } else {
-
     require_once('./vendor/tecnickcom/tcpdf/tcpdf.php');
-    $respuesta = json_decode($response); // en caso de funcionar correctamente
-    //print_r($respuesta); para verificar si tiene una respuesta
 
-    // Definir meses en español manualmente
+    // ========= Clase personalizada con header + footer =========
+    class MYPDF extends TCPDF {
+        public function Header() {
+            // Logos desde URL
+            $logoIzq = __DIR__ . '/../../public/assets/img/gra.png';
+$logoDer = __DIR__ . '/../../public/assets/img/drea.png';
+
+            // Imágenes
+            $this->Image($logoIzq, 10, 10, 30, '', '', '', '', false, 300);
+            $this->Image($logoDer, 175, 10, 30, '', '', '', '', false, 300);
+
+            // Texto centrado
+            $this->SetY(20);
+           $this->SetFont('helvetica', 'B', 10);
+$this->Cell(0, 5, 'GOBIERNO REGIONAL DE AYACUCHO', 0, 1, 'C');
+
+$this->SetFont('helvetica', 'B', 12); // más grande
+$this->Cell(0, 5, 'DIRECCIÓN REGIONAL DE EDUCACIÓN DE AYACUCHO', 0, 1, 'C');
+
+$this->SetFont('helvetica', 'B', 10); // volver al tamaño normal
+$this->Cell(0, 5, 'DIRECCIÓN DE ADMINISTRACIÓN', 0, 1, 'C');
+
+        }
+
+        public function Footer() {
+            $this->SetY(-15);
+            $this->SetFont('helvetica', 'I', 8);
+            $this->Cell(0, 0, '', 'T', 1, 'C');
+            $this->Cell(0, 5, 'Instituto de Educación Superior Tecnológico Publico Huanta ', 0, 1, 'C');
+            $this->Cell(0, 5, 'Página ' . $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages(), 0, 0, 'C');
+        }
+    }
+    // ==========================================================
+
+    $respuesta = json_decode($response);
+
+    // Fecha en español
     $meses = [
-      1 => 'enero', 2 => 'febrero', 3 => 'marzo', 4 => 'abril',
-      5 => 'mayo', 6 => 'junio', 7 => 'julio', 8 => 'agosto',
-      9 => 'septiembre', 10 => 'octubre', 11 => 'noviembre', 12 => 'diciembre'
+        1 => 'enero', 2 => 'febrero', 3 => 'marzo', 4 => 'abril',
+        5 => 'mayo', 6 => 'junio', 7 => 'julio', 8 => 'agosto',
+        9 => 'septiembre', 10 => 'octubre', 11 => 'noviembre', 12 => 'diciembre'
     ];
-
-    // Crear objeto DateTime con la fecha actual
     $fecha = new DateTime();
-
-    // Obtener componentes
     $dia = $fecha->format('d');
     $mes = $meses[(int)$fecha->format('m')];
     $anio = $fecha->format('Y');
 
-    // Comenzar contenido del PDF
-    $contenido_pdf = '';
-    $contenido_pdf .= '
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-    <meta charset="UTF-8">
-    <title>Papeleta de Rotación de Bienes</title>
+    // Contenido HTML para el PDF
+    $contenido_pdf = '
     <style>
-        body {
-        font-family: Arial, sans-serif;
-        padding: 40px;
-        background-color: #ffffff; /* fondo blanco */
-        color: #000000;
-        }
-        h2 {
-        text-align: center;
-        text-transform: uppercase;
-        margin-bottom: 30px;
-        }
-        .section {
-        margin: 20px 0;
-        }
-        .label {
-        font-weight: bold;
-        margin-right: 10px;
-        }
-        table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        }
-        th, td {
-        border: 1px solid #000;
-        padding: 8px;
-        text-align: center;
-        }
-        .footer {
-        margin-top: 60px;
-        display: flex;
-        justify-content: space-between;
-        }
-        .firma {
-        text-align: center;
-        width: 40%;
-        }
-        .firma-linea {
-        margin-top: 40px;
-        border-top: 1px solid #000;
-        width: 100%;
-        }
-        .fecha {
-        margin-top: 40px;
-        text-align: right;
-        }
-        .firma {
-      margin-top: 60px;
-      display: flex;
-      justify-content: space-between;
-      padding: 0 60px;
+        body { font-family: Arial, sans-serif; background-color: #ffffff; color: #000000; }
+         .titulo-principal { 
+        text-align: center; 
+        font-size: 16pt; 
+        font-weight: bold; 
+        margin-bottom: 20px;
     }
-    .firma div {
-      text-align: center;
-    }
+        .section { margin: 20px 0; }
+        .label { font-weight: bold; margin-right: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #000; padding: 8px; text-align: center; }
+        .fecha { margin-top: 40px; text-align: right; }
+        .firma { margin-top: 60px; display: flex; justify-content: space-between; padding: 0 60px; }
+        .firma div { text-align: center; }
     </style>
-    </head>
-    <body>
-
-    <h2>PAPELETA DE ROTACIÓN DE BIENES</h2>
-
+<div class="titulo-principal">
+    PAPELETA DE ROTACIÓN DE BIENES
+</div>
     <div class="section">
         <div><span class="label">ENTIDAD:</span> DIRECCIÓN REGIONAL DE EDUCACIÓN - AYACUCHO</div><br>
         <div><span class="label">ÁREA:</span> OFICINA DE ADMINISTRACIÓN</div><br>
@@ -127,15 +107,15 @@ if ($err) {
     </div>
     <table>
         <thead>
-        <tr>
-            <th>ITEM</th>
-            <th>CÓDIGO PATRIMONIAL</th>
-            <th>NOMBRE DEL BIEN</th>
-            <th>MARCA</th>
-            <th>COLOR</th>
-            <th>MODELO</th>
-            <th>ESTADO</th>
-        </tr>
+            <tr>
+                <th>ITEM</th>
+                <th>CÓDIGO PATRIMONIAL</th>
+                <th>NOMBRE DEL BIEN</th>
+                <th>MARCA</th>
+                <th>COLOR</th>
+                <th>MODELO</th>
+                <th>ESTADO</th>
+            </tr>
         </thead>
         <tbody>
     ';
@@ -156,50 +136,35 @@ if ($err) {
 
     $contenido_pdf .= '
         </tbody>
-        </table>
-        <div class="fecha">
-            Ayacucho, ' . "$dia de $mes del $anio" . '
+    </table>
+    <div class="fecha">
+        Ayacucho, ' . "$dia de $mes del $anio" . '
+    </div>
+
+    <div class="firma">
+        <div>
+            ------------------------------<br>
+            ENTREGUE CONFORME
         </div>
-
-        <div class="firma">
-    <div>
-      ------------------------------<br>
-      ENTREGUE CONFORME
+        <div>
+            ------------------------------<br>
+            RECIBÍ CONFORME
+        </div>
     </div>
-    <div>
-      ------------------------------<br>
-      RECIBI CONFORME
-    </div>
-  </div>
-
-    </body>
-    </html>
     ';
 
-    $pdf = new TCPDF(); //si quieres cambiar algo de loque viene por defecto debes de cambiar desde el inicio hasta la informacion que deseas cambiar 
-    // eso es por defecto $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-    // Asignar informacion del documento
+    // Crear el PDF
+    $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
     $pdf->SetCreator('DPW');
     $pdf->SetAuthor('Jose Ramirez');
     $pdf->SetTitle('Reporte de Movimiento');
-
-    // Asignar los margenes
-    $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-
-    // Asignar salto de pagina automatico
+    $pdf->SetMargins(PDF_MARGIN_LEFT, 55, PDF_MARGIN_RIGHT); // margen superior alto por el header
     $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-    // Asignar fuente
-    $pdf->SetFont('helvetica', 'B', 12);
-
-    // Añadir una pagina
+    $pdf->SetFont('helvetica', '', 10);
     $pdf->AddPage();
-    // generar el contenido HTML
-    $pdf->writeHTML($contenido_pdf);
+    $pdf->writeHTML($contenido_pdf, true, false, true, false, '');
 
-ob_clean();
-    //Close and output PDF document
-    $pdf->Output('example_006.pdf', 'I');
+    ob_clean();
+    $pdf->Output('reporte_movimiento.pdf', 'I');
 }
 ?>
