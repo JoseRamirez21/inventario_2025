@@ -195,7 +195,6 @@ if ($err) {
 
     // Añadir una pagina
     $pdf->AddPage();
-
     // generar el contenido HTML
     $pdf->writeHTML($contenido_pdf);
 
