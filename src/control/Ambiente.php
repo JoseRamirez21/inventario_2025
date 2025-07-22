@@ -164,3 +164,19 @@ if ($tipo == "datos_registro") {
     }
     echo json_encode($arr_Respuesta);
 }
+if ($tipo == "imprimir_pdf") {
+    if ($objSesion->verificar_sesion_si_activa($id_sesion, $token)) {
+        $ies = $_POST['ies'];
+        $busqueda_tabla_codigo = $_POST['busqueda_tabla_codigo'];
+        $busqueda_tabla_ambiente = $_POST['busqueda_tabla_ambiente'];
+
+        // Redireccionar al generador de PDF
+        $url = "admin-ambientePdf.php?ies=" . urlencode($ies) .
+            "&codigo=" . urlencode($busqueda_tabla_codigo) .
+            "&ambiente=" . urlencode($busqueda_tabla_ambiente);
+
+        echo json_encode(['status' => true, 'url' => $url]);
+    } else {
+        echo json_encode(['status' => false, 'msg' => 'Sesión inválida']);
+    }
+}

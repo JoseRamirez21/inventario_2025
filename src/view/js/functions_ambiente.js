@@ -284,3 +284,74 @@ async function actualizarAmbiente(id) {
     }
 }
 
+async function imprimirAmbientePDF() {
+    try {
+        const ies = session_ies;
+        const codigo = document.getElementById('busqueda_tabla_codigo').value;
+        const ambiente = document.getElementById('busqueda_tabla_ambiente').value;
+
+        if (!ies) {
+            Swal.fire("Advertencia", "Debe seleccionar una institución", "warning");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('tipo', 'imprimir_pdf');
+        formData.append('ies', ies);
+        formData.append('busqueda_tabla_codigo', codigo);
+        formData.append('busqueda_tabla_ambiente', ambiente);
+        formData.append('id_sesion', session_session);
+        formData.append('token', token_token);
+
+        let respuesta = await fetch(base_url_server + 'src/controller/admin-ambienteController.php', {
+            method: 'POST',
+            body: formData,
+        });
+
+        const json = await respuesta.json();
+
+        if (json.status) {
+            window.open(base_url_server + 'imprimir-ambientes.php?file=' + encodeURIComponent(json.file), '_blank');
+        } else {
+            Swal.fire("Error", json.msg || "No se pudo generar el PDF", "error");
+        }
+    } catch (error) {
+        console.error("Error al imprimir PDF:", error);
+        Swal.fire("Error", "Hubo un error inesperado", "error");
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const btnImprimir = document.getElementById("btn-imprimir-ambientes");
+
+    if (btnImprimir) {
+        btnImprimir.addEventListener("click", function () {
+            const ies = document.getElementById("busqueda_ies")?.value || "";
+            const codigo = document.getElementById("busqueda_tabla_codigo")?.value || "";
+            const ambiente = document.getElementById("busqueda_tabla_ambiente")?.value || "";
+
+            const datos = new FormData();
+            datos.append("tipo", "imprimir_pdf");
+            datos.append("ies", ies);
+            datos.append("busqueda_tabla_codigo", codigo);
+            datos.append("busqueda_tabla_ambiente", ambiente);
+
+            fetch("src/control/Ambiente.php", {
+                method: "POST",
+                body: datos,
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status) {
+                    window.open(data.url, "_blank");
+                } else {
+                    alert(data.msg || "Error al generar el PDF");
+                }
+            })
+            .catch(error => {
+                console.error("Error al imprimir:", error);
+                alert("Error de red");
+            });
+        });
+    }
+});

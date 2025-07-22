@@ -177,3 +177,15 @@ if ($tipo == "datos_registro") {
     }
     echo json_encode($arr_Respuesta);
 }
+if ($tipo == "buscar_institucion_id") {
+    $arr_Respuesta = array('status' => false, 'msg' => 'No encontrado');
+    if ($objSesion->verificar_sesion_si_activa($id_sesion, $token)) {
+        $id = $_POST['id'];
+        $institucion = $objInstitucion->buscarInstitucionById($id);
+        if ($institucion) {
+            $arr_Respuesta['status'] = true;
+            $arr_Respuesta['data'] = $institucion;
+        }
+    }
+    echo json_encode($arr_Respuesta);
+}
