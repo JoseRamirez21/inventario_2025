@@ -1,8 +1,5 @@
     <?php
-    // Evitar múltiples session_start()
-    if (session_status() == PHP_SESSION_NONE) {
-        session_start();
-    }
+   
     require_once('./vendor/tecnickcom/tcpdf/tcpdf.php');
 
     // CONSULTA A LA API

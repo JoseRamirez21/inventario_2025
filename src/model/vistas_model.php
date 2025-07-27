@@ -5,8 +5,7 @@ class vistaModelo
     {
 
         $palabras_permitidas_n1 = ['inicio', 'usuarios', 'nuevo-usuario', 'instituciones', 'nueva-institucion', 'ambientes', 'nuevo-ambiente', 'bienes',  'nuevo-bien', 'movimientos', 'nuevo-movimiento',
-        'correo','imprimir-movimiento','reporte-bienes','imprimir-instituciones','imprimir-ambientes'
-    , 'imprimir-bienes', 'imprimir-usuario', 'imprimir-movimientos-todos'];
+        'correo','imprimir-movimiento','reporte-bienes','imprimir-instituciones','imprimir-ambientes','imprimir-bienes','imprimir-usuario','imprimir-movimientos-todos'];
 
         if (in_array($vista, $palabras_permitidas_n1)) {
 
