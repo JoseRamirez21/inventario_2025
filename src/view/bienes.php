@@ -41,6 +41,7 @@
             </div>
         </div>
         <div class="card">
+              <a href="<?php BASE_URL ?>imprimir-bienes" class="btn btn-danger">Imprimir Bienes <i class="fa fa-print"></i></a>
             <div class="card-body">
                 <a href="<?= BASE_URL?>reporte-bienes" class="btn btn-success"><i class="fa fa-file-excel"></i></a>
                 <h4 class="card-title">Resultados de Búsqueda</h4>

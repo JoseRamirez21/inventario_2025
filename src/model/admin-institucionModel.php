@@ -77,7 +77,20 @@ class InstitucionModel
         }
         return $arrRespuesta;
     }
-
+ public function listarTodasInstituciones()
+    {
+        $sql = $this->conexion->query("
+            SELECT i.*, u.nombres_apellidos 
+            FROM institucion i 
+            LEFT JOIN usuarios u ON i.beneficiario = u.id 
+            ORDER BY i.nombre ASC
+        ");
+        $arrRespuesta = array();
+        while ($objeto = $sql->fetch_object()) {
+            array_push($arrRespuesta, $objeto);
+        }
+        return $arrRespuesta;
+    }
 
 
 }

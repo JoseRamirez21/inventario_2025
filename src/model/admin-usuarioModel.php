@@ -118,4 +118,13 @@ class UsuarioModel
         }
         return $arrRespuesta;
     }
+    public function listarTodosLosUsuarios()
+{
+    $arrRespuesta = array();
+    $sql = $this->conexion->query("SELECT * FROM usuarios ORDER BY nombres_apellidos ASC");
+    while ($objeto = $sql->fetch_object()) {
+        array_push($arrRespuesta, $objeto);
+    }
+    return $arrRespuesta;
+}
 }

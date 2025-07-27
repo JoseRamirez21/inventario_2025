@@ -40,6 +40,8 @@
             </div>
         </div>
         <div class="card">
+                       <a href="<?php BASE_URL ?>imprimir-instituciones" class="btn btn-danger">Imprimir Instituciones <i class="fa fa-print"></i></a>
+                
             <div class="card-body">
                 <h4 class="card-title">Resultados de Búsqueda</h4>
                 <div id="filtros_tabla_header" class="form-group  row page-title-box d-flex align-items-center justify-content-between m-0 mb-1 p-0">
